@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
-import { searchMovies } from '../api/omdb';
+import { getMovieRatings, searchMovies } from '../api/omdb';
 
 
 
@@ -9,9 +9,33 @@ export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState('');
 
+
+  useEffect(() => {
+    searchMovies('Casino Royale').then((data) => { console.log(data); });
+  }, []);
+
+  useEffect(() => {
+    getMovieRatings('tt0381061').then((data) => { console.log(data); });
+  }, []);
+
+
+
   async function handleSearch() {
-    searchMovies(query);
-    
+    if (!query.trim()) return;
+
+    try { 
+      const movies = await searchMovies(query);
+      if (movies.length === 0) {
+        console.log('No results');
+      }
+      else {
+        //setResults(movies);
+        //console.log(movies);
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
 
