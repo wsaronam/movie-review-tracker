@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TextInput, View } from 'react-native';
-import { getMovieRatings, searchMovies } from '../api/omdb';
+import { searchMovies } from '../api/omdb';
+import MovieCard from '../components/MovieCard';
 
 
 
@@ -10,14 +11,16 @@ export default function SearchScreen() {
   const [results, setResults] = useState('');
 
 
-  useEffect(() => {
-    searchMovies('Casino Royale').then((data) => { console.log(data); });
-  }, []);
-
-  useEffect(() => {
-    getMovieRatings('tt0381061').then((data) => { console.log(data); });
-  }, []);
-
+const testMovie = {
+  imdbID: 'tt0381061',
+  title: 'Casino Royale',
+  year: '2006',
+  genre: 'Action, Adventure, Thriller',
+  poster: 'https://m.media-amazon.com/images/M/MV5BMWQ1ZDM4NDktMWY0NC00MjcxLWJlMDMtNmE2MGVhYzRjMWQ0XkEyXkFqcGc@._V1_SX300.jpg',
+  imdb: '8.0/10',
+  rottenTomatoes: '94%',
+  metacritic: '80/100',
+};
 
 
   async function handleSearch() {
@@ -52,6 +55,11 @@ export default function SearchScreen() {
           returnKeyType='search'
         />
       </View>
+
+      <View style={{ flex: 1, backgroundColor: '#fff', padding: 200 }}>
+        <MovieCard movie={testMovie} />
+      </View>
+
     </View>
   );
 
