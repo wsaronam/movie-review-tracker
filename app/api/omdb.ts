@@ -1,5 +1,5 @@
 // temp key location
-const API_KEY = 'put_ky_here';
+const API_KEY = 'put_key_here';
 const BASE_URL = 'https://www.omdbapi.com';
 
 

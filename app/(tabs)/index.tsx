@@ -1,14 +1,10 @@
 import { useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { searchMovies } from '../api/omdb';
 import MovieCard from '../components/MovieCard';
+import { colors, spacing } from '../theme';
 
 
-
-
-export default function SearchScreen() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState('');
 
 
 const testMovie = {
@@ -21,6 +17,11 @@ const testMovie = {
   rottenTomatoes: '94%',
   metacritic: '80/100',
 };
+
+
+export default function SearchScreen() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState('');
 
 
   async function handleSearch() {
@@ -44,10 +45,10 @@ const testMovie = {
 
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
         <TextInput 
-          style={{ borderWidth: 1, borderColor: '#ccc', margin: 16 }}
+          style={styles.input}
           placeholder='Search for a movie...'
           value={query}
           onChangeText={setQuery}
@@ -56,11 +57,29 @@ const testMovie = {
         />
       </View>
 
-      <View style={{ flex: 1, backgroundColor: '#fff', padding: 200 }}>
-        <MovieCard movie={testMovie} />
-      </View>
+      <MovieCard movie={testMovie} />
 
     </View>
   );
 
 }
+
+
+
+
+const styles = StyleSheet.create ({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    padding: spacing.md
+  },
+
+  input: {
+    height: 44,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 8,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md
+  }
+})

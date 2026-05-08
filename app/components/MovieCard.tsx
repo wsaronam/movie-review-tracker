@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { MovieRatings } from '../api/omdb';
-import { borderRadius, colors, spacing } from '../theme';
+import { borderRadius, colors, fontSizes, spacing } from '../theme';
 import RatingBadge from './RatingBadge';
 
 
@@ -13,17 +13,17 @@ interface MovieCardProps {
 export default function MovieCard({movie}: MovieCardProps) {
     return (
         <View style={styles.container}>
-            <View>
+            <View style={styles.header}>
                 {movie.poster ? 
                 ( <Image source={{ uri: movie.poster }} style={styles.poster} /> ) : null}
-                <View>
-                    <Text>{movie.title}</Text>
-                    <Text>{movie.year}</Text>
-                    <Text>{movie.genre}</Text>
+                <View style={styles.info}>
+                    <Text style={styles.title}>{movie.title}</Text>
+                    <Text style={styles.subtitle}>{movie.year}</Text>
+                    <Text style={styles.subtitle}>{movie.genre}</Text>
                 </View>
             </View>
 
-            <View>
+            <View style={styles.ratingsGrid}>
                 <RatingBadge
                     label='IMDb'
                     value={movie.imdb}
@@ -59,8 +59,38 @@ const styles = StyleSheet.create ({
         marginBottom: spacing.md
     },
 
+    header: {
+        flexDirection: 'row',
+        marginBottom: spacing.md
+    },
+
     poster: {
         width: 70,
-        height: 100
+        height: 100,
+        borderRadius: borderRadius.sm,
+        marginRight: spacing.md
+    },
+
+    info: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+
+    title: {
+        fontSize: fontSizes.lg,
+        fontWeight: '600',
+        color: colors.textPrimary,
+        marginBottom: spacing.sm
+    },
+
+    subtitle: {
+        fontSize: fontSizes.sm,
+        color: colors.textSecondary,
+        marginBottom: 2
+    },
+
+    ratingsGrid: {
+        flexDirection: 'row',
+        gap: spacing.sm
     }
 })
