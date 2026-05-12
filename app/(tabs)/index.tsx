@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { searchMovies } from '../api/omdb';
 import MovieCard from '../components/MovieCard';
+import { useTrackedMovies } from '../hooks/useTrackedMovies';
 import { colors, spacing } from '../theme';
 
 
@@ -22,6 +23,18 @@ const testMovie = {
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState('');
+
+  // TEST -------
+  const { trackedMovies, addMovie, removeMovie } = useTrackedMovies();
+
+  useEffect(() => {
+    addMovie(testMovie);
+  }, [])
+
+  useEffect(() => {
+    console.log('Tracked movies:', trackedMovies);
+  }, [trackedMovies]);
+  // TEST -------
 
 
   async function handleSearch() {
