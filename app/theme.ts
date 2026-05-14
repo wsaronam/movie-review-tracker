@@ -1,15 +1,18 @@
 export const colors = {
     // background stuff
-    background: '#FFF',
-    backgroundSecondary: '#F5F5F5',
+    background: '#000000',
+    backgroundSecondary: '#292929',
 
     // text stuff
-    textPrimary: '#000000',
-    textSecondary: '#616161',
-    textTertiary: '#aaaaaa',
+    textPrimary: '#ffffff',
+    textSecondary: '#afafaf',
+    textTertiary: '#797979',
 
     // border stuff
     border: '#e0e0e0',
+
+    // status stuff
+    error: '#c50000',
 
     // ratings source colors
     imdb: '#f3c419',
