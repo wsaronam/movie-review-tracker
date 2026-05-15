@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
-import { searchMovies } from '../api/omdb';
-import MovieCard from '../components/MovieCard';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { getMovieRatings, MovieSearchResult, searchMovies } from '../api/omdb';
 import { useTrackedMovies } from '../hooks/useTrackedMovies';
 import { colors, spacing } from '../theme';
 
@@ -22,20 +21,16 @@ const testMovie = {
 
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState('');
+  const [results, setResults] = useState<MovieSearchResult[]>([]);
+  const [tracking, setTracking] = useState<string | null>(null);
 
-  // TEST -------
-  const { trackedMovies, addMovie, removeMovie } = useTrackedMovies();
+  const {trackedMovies, addMovie} = useTrackedMovies();
 
-  useEffect(() => {
-    addMovie(testMovie);
-  }, [])
 
   useEffect(() => {
-    console.log('Tracked movies:', trackedMovies);
-  }, [trackedMovies]);
-  // TEST -------
-
+    console.log(trackedMovies);
+  }, [trackedMovies])
+  
 
   async function handleSearch() {
     if (!query.trim()) return;
@@ -46,13 +41,21 @@ export default function SearchScreen() {
         console.log('No results');
       }
       else {
-        //setResults(movies);
-        //console.log(movies);
+        setResults(movies);
       }
     }
     catch (err) {
       console.log(err);
     }
+  }
+
+  async function handleTrack(movie: MovieSearchResult) {
+    const ratings = await getMovieRatings(movie.imdbID);
+    if (ratings) await addMovie(ratings);
+  }
+
+  function isTracked(imdbID: string) {
+    return trackedMovies.some((m) => m.imdbID === imdbID);
   }
 
 
@@ -68,9 +71,31 @@ export default function SearchScreen() {
           onSubmitEditing={handleSearch}
           returnKeyType='search'
         />
+        <TouchableOpacity onPress={handleSearch}>
+          <Text>Search</Text>
+        </TouchableOpacity>
       </View>
 
-      <MovieCard movie={testMovie} />
+      <FlatList 
+        data={results}
+        keyExtractor={(item) => item.imdbID}
+        renderItem={({ item }) => (
+          <View>
+            <View>
+              <Text style={{color: 'white'}}>{item.Title}</Text>
+              <Text style={{color: 'white'}}>{item.Year}</Text>
+            </View>
+            <TouchableOpacity
+              style={{backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', minWidth: 70, height: 32}}
+              onPress={() => handleTrack(item)}
+              disabled={isTracked(item.imdbID) || tracking === item.imdbID}
+            >
+
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+
 
     </View>
   );
